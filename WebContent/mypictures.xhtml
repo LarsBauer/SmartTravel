@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile">
+
+<h:head>
+	<h:outputScript name="js/own.js" />
+	<h:outputStylesheet name="css/own.css" />
+	<h:outputStylesheet name="css/flatui.min.css" />
+	<h:outputStylesheet name="css/jquery.mobile.icons.min.css" />
+	<h:outputScript name="js/jquery.cycle2.js" />
+</h:head>
+<h:body>
+	<pm:page id="mypictures">
+		<p:overlayPanel for="menuButton" widgetVar="menuPanel" at="left"
+			showEffect="push">
+			<p:menu>
+				<p:menuitem value="Start" url="/faces/start.xhtml" />
+				<p:menuitem value="Wetter" url="/faces/weather.xhtml" />
+				<p:menuitem value="Map" url="/faces/map.xhtml" />
+				<p:menuitem value="Meine Bilder" url="/faces/mypictures.xhtml" />
+			</p:menu>
+			<p:separator></p:separator>
+			<h:form>
+				<p:commandButton id="logoutButton" value="Logout"
+					actionListener="#{userBean.logout}" styleClass="ui-btn-inline" />
+			</h:form>
+		</p:overlayPanel>
+		<pm:header title="Meine Bilder">
+			<p:commandButton id="menuButton"
+				styleClass="ui-btn-left ui-btn-inline" value="Menu"
+				icon="ui-icon-home" />
+		</pm:header>
+		<pm:content>
+			<p:panel header="Lade ein Bild hoch">
+				<h:form id="form1" enctype="multipart/form-data">
+					<p:growl showDetail="true" />
+					<p:fileUpload value="#{userBean.uploadedImage}" mode="simple"
+						allowTypes="/(\.|\/)(jpe?g|png)$/" />
+					<p:commandButton value="Upload" icon="ui-icon-arrow-u" ajax="false"
+						actionListener="#{userBean.imageUpload}" />
+				</h:form>
+			</p:panel>
+			<p:panel header="Deine Bilder" style="margin-top:3px;">
+				<h:form id="form2">
+					<p:remoteCommand name="displayImage"
+						actionListener="#{imageBean.displayImage}" />
+					<div class="cycle-slideshow">
+						<ui:repeat value="#{userBean.currentUser.images}" var="image"
+							id="fadeEffectImages">
+							<p:graphicImage width="100%" name="/fileDb/#{image.filename}"
+								id="image" />
+						</ui:repeat>
+					</div>
+				</h:form>
+			</p:panel>
+		</pm:content>
+	</pm:page>
+</h:body>
+</html>

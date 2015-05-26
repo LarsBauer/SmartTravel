@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile">
+
+<h:head>
+	<h:outputScript name="js/own.js" />
+	<h:outputStylesheet name="css/own.css" />
+	<h:outputStylesheet name="css/flatui.min.css" />
+	<h:outputStylesheet name="css/jquery.mobile.icons.min.css" />
+</h:head>
+<h:body>
+	<pm:page id="imageDetail">
+		<p:overlayPanel for="menuButton" widgetVar="menuPanel" at="left"
+			showEffect="push">
+			<p:menu>
+				<p:menuitem value="Start" url="/faces/start.xhtml" />
+				<p:menuitem value="Wetter" url="/faces/weather.xhtml" />
+				<p:menuitem value="Map" url="/faces/map.xhtml" />
+				<p:menuitem value="Meine Bilder" url="/faces/mypictures.xhtml" />
+			</p:menu>
+			<p:separator></p:separator>
+			<h:form>
+				<p:commandButton id="logoutButton" value="Logout"
+					actionListener="#{userBean.logout}" styleClass="ui-btn-inline" />
+			</h:form>
+		</p:overlayPanel>
+		<pm:header title="#{imageBean.curImage.user.username}'s Foto">
+			<p:commandButton id="menuButton"
+				styleClass="ui-btn-left ui-btn-inline" value="Menu"
+				icon="ui-icon-home" />
+		</pm:header>
+		<pm:content>
+			<p:graphicImage
+				value="/resources/fileDb/#{imageBean.curImage.filename}"
+				rendered="#{not empty mapBean.selectedMarker.data}" width="100%" />
+			<h:form>
+				<p:growl id="growl" showDetail="true" />
+				<p:selectOneMenu id="rating" value="#{imageBean.rating}"
+					onchange="submit()"
+					valueChangeListener="#{imageBean.ratingChangeListener}"
+					tabindex="#{imageBean.rating}">
+					<f:selectItem itemLabel="Vote!" itemValue="" />
+					<f:selectItem itemLabel="★ - ADF" itemValue="1" />
+					<f:selectItem itemLabel="★★ - Meeh..." itemValue="2" />
+					<f:selectItem itemLabel="★★★ - Coole Sache" itemValue="3" />
+					<f:selectItem itemLabel="★★★★ - Awesome" itemValue="4" />
+					<f:selectItem itemLabel="★★★★★ - Supergeil!" itemValue="5" />
+				</p:selectOneMenu>
+
+				<p:inputTextarea id="commentBox" rows="3" cols="40"
+					counter="display" counterTemplate="{0} verbleibende Zeichen"
+					maxlength="150" autoresize="false" value="#{imageBean.comment}"
+					placeholder="Gib einen Kommentar ab..." />
+				<h:outputText id="display" />
+
+				<p:commandButton id="commentButton" value="Kommentieren"
+					actionListener="#{imageBean.addComment}"
+					update="commentBox commentList growl" styleClass="ui-btn-inline"
+					style="margin-top:0px;" />
+
+				<p:accordionPanel id="commentList" activeIndex="false"> -->
+						<p:tab title="Kommentare">
+						<p:dataList value="#{imageBean.curImage.comments}" var="comment">
+							<h:outputText
+								value="#{comment.timeString} - #{comment.user.username}:&lt;br /&gt;#{comment.content}"
+								escape="false"/>
+						</p:dataList>
+					</p:tab>
+				</p:accordionPanel>
+			</h:form>
+		</pm:content>
+	</pm:page>
+</h:body>
+</html>

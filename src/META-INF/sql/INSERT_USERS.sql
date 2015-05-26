@@ -1,0 +1,1 @@
+INSERT INTO USER_TABLE VALUES(0,'test','test');

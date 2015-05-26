@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile">
+
+<h:head>
+	<h:outputStylesheet name="css/flatui.min.css" />
+	<h:outputStylesheet name="css/jquery.mobile.icons.min.css" />
+</h:head>
+
+<h:body>
+	<pm:page id="register">
+		<pm:header title="SmartTravel">
+		</pm:header>
+		<pm:content>
+			<h:form id="registerForm">
+				<p:growl id="growl" showDetail="true" />
+				<pm:field>
+					<p:outputLabel for="userName" value="Username:" />
+					<p:inputText id="userName" value="#{userBean.username}"
+						required="true" label="Username" />
+				</pm:field>
+				<pm:field>
+					<p:outputLabel for="password" value="Passwort:" />
+					<h:inputSecret id="password" value="#{userBean.password}"
+						required="true" label="Passwort" />
+				</pm:field>
+				<pm:field>
+					<p:outputLabel for="passwordWdh" value="Passwort wiederholen:" />
+					<h:inputSecret id="passwordWdh" value="#{userBean.passwordWdh}"
+						required="true" label="Passwort wiederholen" />
+				</pm:field>
+				
+				<p:commandButton id="registerButton" value="Register"
+					actionListener="#{userBean.register}" update="growl"
+					styleClass="ui-btn-inline" />
+			</h:form>
+		</pm:content>
+	</pm:page>
+</h:body>
+
+</html>

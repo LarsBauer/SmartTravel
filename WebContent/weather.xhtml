@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pm="http://primefaces.org/mobile">
+
+<h:head>
+	<h:outputScript name="js/own.js" />
+	<h:outputStylesheet name="css/own.css" />
+	<h:outputStylesheet name="css/flatui.min.css" />
+	<h:outputStylesheet name="css/jquery.mobile.icons.min.css" />
+</h:head>
+<h:body onload="loadForecast()">
+	<pm:page id="weather">
+		<p:overlayPanel for="menuButton" widgetVar="menuPanel" at="left"
+			showEffect="push">
+			<p:menu>
+				<p:menuitem value="Start" url="/faces/start.xhtml" />
+				<p:menuitem value="Wetter" url="/faces/weather.xhtml" />
+				<p:menuitem value="Map" url="/faces/map.xhtml" />
+				<p:menuitem value="Meine Bilder" url="/faces/mypictures.xhtml" />
+			</p:menu>
+			<p:separator></p:separator>
+			<h:form>
+				<p:commandButton id="logoutButton" value="Logout"
+					actionListener="#{userBean.logout}" styleClass="ui-btn-inline" />
+			</h:form>
+		</p:overlayPanel>
+		<pm:header title="Wetter">
+			<p:commandButton id="menuButton"
+				styleClass="ui-btn-left ui-btn-inline" value="Menu"
+				icon="ui-icon-home" />
+		</pm:header>
+		<pm:content>
+			<h:form id="weatherForm" width="100%">
+				<p:remoteCommand name="fetchForecast" actionListener="#{weatherBean.fetchForecast}" update="weatherForm"/>
+				<p:panel header="Heute">
+					<h:panelGrid id="currentGrid" columns="2" width="100%"
+						style="text-align:left;">
+						<h:panelGroup width="50%">
+							<h:outputText style="font-size:20px;" value="#{weatherBean.weather.today}" />
+							<br />
+							<h:outputText style="font-size:40px;" value="#{weatherBean.weather.currentTemp}°C" />
+						</h:panelGroup>
+						<h:panelGroup width="50%">
+							<p:graphicImage styleClass="centered"
+								value="/resources/img/#{weatherBean.weather.iconCode}.png"
+								rendered="#{not empty weatherBean.weather}"/>
+						</h:panelGroup>
+						<h:panelGroup width="50%">
+							<h:outputText value="Min: #{weatherBean.forecast[0].minTemp} °C" />
+							<br />
+							<h:outputText value="Max: #{weatherBean.forecast[0].maxTemp} °C" />
+						</h:panelGroup>
+						<h:panelGroup width="50%">
+							<h:outputText  value="Hygro: #{weatherBean.weather.humidity} %" />
+							<br />
+							<h:outputText value="Wind: #{weatherBean.weather.wind} km/h" />
+						</h:panelGroup>
+					</h:panelGrid>
+				</p:panel>
+				<h:panelGrid id="forecastGrid" columns="3" width="100%">
+					<h:panelGroup>
+						<p:panel header="#{weatherBean.forecast[1].date}">
+							<div class="bubblezzz">
+								<h:outputText value="#{weatherBean.forecast[1].dayTemp}°" />
+							</div>
+							<p:graphicImage styleClass="forecastIcon"
+								value="/resources/img/#{weatherBean.forecast[1].iconCode}.png"
+								rendered="#{not empty weatherBean.forecast}" width="60px"
+								height="60px" />
+						</p:panel>
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:panel header="#{weatherBean.forecast[2].date}">
+							<div class="bubblezzz">
+								<h:outputText value="#{weatherBean.forecast[2].dayTemp}°" />
+							</div>
+							<p:graphicImage styleClass="forecastIcon"
+								value="/resources/img/#{weatherBean.forecast[2].iconCode}.png"
+								rendered="#{not empty weatherBean.forecast}" width="60px"
+								height="60px" />
+						</p:panel>
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:panel header="#{weatherBean.forecast[3].date}">
+							<div class="bubblezzz">
+								<h:outputText value="#{weatherBean.forecast[3].dayTemp}°" />
+							</div>
+							<p:graphicImage styleClass="forecastIcon"
+								value="/resources/img/#{weatherBean.forecast[3].iconCode}.png"
+								rendered="#{not empty weatherBean.forecast}" width="60px"
+								height="60px" />
+						</p:panel>
+					</h:panelGroup>
+				</h:panelGrid>
+				<!-- 				<h:panelGroup id="forecast"> -->
+				<!-- 					<p:panel header="#{weatherBean.forecast[0].date}"> -->
+				<!-- 						<h:panelGrid columns="2" width="100%" style="text-align:center"> -->
+				<!-- 							<h:panelGroup> -->
+				<!-- 								<h:outputText value="#{weatherBean.forecast[0].dayTemp} °C" /> -->
+				<!-- 								<p:separator /> -->
+				<!-- 								<h:outputText value="min: #{weatherBean.forecast[0].minTemp} °C" /> -->
+				<!-- 								<h:outputText value="max: #{weatherBean.forecast[0].maxTemp} °C" /> -->
+				<!-- 							</h:panelGroup> -->
+				<!-- 							<p:graphicImage value="/resources/img/#{weatherBean.forecast[0].iconCode}.png" rendered="#{not empty weatherBean.forecast}" /> -->
+				<!-- 						</h:panelGrid> -->
+				<!-- 					</p:panel> -->
+				<!-- 					<p:panel header="#{weatherBean.forecast[1].date}"> -->
+				<!-- 						<h:panelGrid columns="2" width="100%" style="text-align:center"> -->
+				<!-- 							<h:panelGroup> -->
+				<!-- 								<h:outputText value="#{weatherBean.forecast[1].dayTemp} °C" /> -->
+				<!-- 								<p:separator /> -->
+				<!-- 								<h:outputText value="min: #{weatherBean.forecast[1].minTemp} °C" /> -->
+				<!-- 								<h:outputText value="max: #{weatherBean.forecast[1].maxTemp} °C" /> -->
+				<!-- 							</h:panelGroup> -->
+				<!-- 							<p:graphicImage value="/resources/img/#{weatherBean.forecast[1].iconCode}.png" rendered="#{not empty weatherBean.forecast}" /> -->
+				<!-- 						</h:panelGrid> -->
+				<!-- 					</p:panel> -->
+				<!-- 					<p:panel header="#{weatherBean.forecast[2].date}"> -->
+				<!-- 						<h:panelGrid columns="2" width="100%" style="text-align:center"> -->
+				<!-- 							<h:panelGroup> -->
+				<!-- 								<h:outputText value="#{weatherBean.forecast[2].dayTemp} °C" /> -->
+				<!-- 								<p:separator /> -->
+				<!-- 								<h:outputText value="min: #{weatherBean.forecast[2].minTemp} °C" /> -->
+				<!-- 								<h:outputText value="max: #{weatherBean.forecast[2].maxTemp} °C" /> -->
+				<!-- 							</h:panelGroup> -->
+				<!-- 							<p:graphicImage value="/resources/img/#{weatherBean.forecast[0].iconCode}.png" rendered="#{not empty weatherBean.forecast}" /> -->
+				<!-- 						</h:panelGrid> -->
+				<!-- 					</p:panel> -->
+				<!-- 				</h:panelGroup> -->
+			</h:form>
+		</pm:content>
+	</pm:page>
+</h:body>
+</html>
